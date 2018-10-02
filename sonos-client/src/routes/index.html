@@ -1,0 +1,28 @@
+<MusicPlayer houses={houses} />
+
+<script>
+  import { request } from '../request'
+
+  const query = `{
+    houses: households {
+      id
+      groups {
+        id
+        name
+        playbackState
+      }
+    }
+  }`
+
+  export default {
+    async preload() {
+      let { errors, data } = await request(this, query)
+
+      return data
+    },
+
+    components: {
+      MusicPlayer: '../components/MusicPlayer.html'
+    }
+  }
+</script>

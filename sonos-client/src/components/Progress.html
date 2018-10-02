@@ -1,0 +1,68 @@
+<div class="container">
+  <Time value={current} />
+  <progress min="0" max={duration} value={current} />
+  <Time value={duration} />
+</div>
+
+<script>
+  export default {
+    data() {
+      return {
+        isPlaying: false,
+        duration: 0,
+        position: 0,
+        offset: 0
+      }
+    },
+    onstate({ changed, current }) {
+      if ('position' in changed) {
+        this.set({ offset: 0 })
+      }
+
+      clearTimeout(this.timer)
+
+      if (current.isPlaying) {
+        let then = Date.now()
+        this.timer = setTimeout(() => {
+          let diff = Date.now() - then
+          this.set({ offset: current.offset + diff})
+        }, 1000)
+      }
+    },
+    computed: {
+      current: ({ position, offset }) => Math.round(position + offset)
+    },
+    ondestroy() {
+      clearTimeout(this.timer)
+    },
+    components: {
+      Time: './Time.html'
+    }
+  }
+</script>
+
+<style>
+  .container {
+    align-items: center;
+    display: flex;
+    font-size: 0.7rem;
+    justify-content: center;
+    margin: 8px auto;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  progress {
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    height: 4px;
+    flex-grow: 1;
+    margin: 0 12px;
+  }
+
+  progress::-webkit-progress-value {
+    border-radius: 2px;
+    background: white;
+  }
+</style>

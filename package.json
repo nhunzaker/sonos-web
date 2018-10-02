@@ -1,0 +1,21 @@
+{
+  "name": "sonos",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "start": "yarn workspace sonos-client start",
+    "start:dev": "yarn workspace sonos-client dev",
+    "start:client": "yarn workspace sonos-client start",
+    "format": "prettier --write {sonos-client,sonos-server,sonos-events}/**/*.js ./*.js",
+    "secret": "node -p \"console.log(require('crypto').randomBytes(64).toString('hex'))\"",
+    "build": "yarn workspace sonos-client build"
+  },
+  "dependencies": {
+    "prettier": "^1.14.3"
+  },
+  "workspaces": [
+    "sonos-server",
+    "sonos-events",
+    "sonos-client"
+  ]
+}

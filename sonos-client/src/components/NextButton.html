@@ -1,0 +1,51 @@
+<form on:submit="next(event)">
+  <button>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <title>Next</title>
+      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+      <path d="M0 0h24v24H0z" fill="none" />
+    </svg>
+  </button>
+</form>
+
+<script>
+  import { Next } from '../mutations'
+
+  export default {
+    methods: {
+      next(event) {
+        let { group } = this.get()
+
+        event.preventDefault()
+
+        Next({ group: group.id })
+      }
+    }
+  }
+</script>
+
+<style>
+  form {
+    display: contents;
+  }
+
+  button {
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    border: 0;
+    opacity: 0.68;
+    transition: 0.3s all;
+  }
+
+  button:hover,
+  button:focus {
+    opacity: 1;
+    transition: 0.12s all;
+  }
+
+  button svg {
+    display: block;
+    fill: white;
+  }
+</style>

@@ -1,0 +1,57 @@
+<figure>
+  <img src={track.image} alt={track.album} style="opacity: {track.image ? 1 : 0}">
+  <figcaption>
+    <p>{track.title} - {track.artist}</p>
+    <p class="secondary">via {track.service}</p>
+  </figcaption>
+</figure>
+
+<script>
+  export default {
+    data() {
+      return {
+        track: {
+          title: '',
+          album: '',
+          artist: '',
+          image: '',
+          service: ''
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  figure {
+    text-align: center;
+  }
+
+  figcaption {
+    font-weight: 500;
+    margin: 20px auto 0;
+  }
+
+  figcaption p {
+    margin: 0;
+  }
+
+  .secondary {
+    font-weight: 300;
+    opacity: 0.68;
+    font-size: 0.9rem;
+  }
+
+  img {
+    border-radius: 1px;
+    box-shadow: 0px 1px 7px 1px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.54);
+    display: block;
+    height: 250px;
+    margin: 0 auto;
+    max-height: 50vh;
+    max-width: 50vh;
+    transition: 0.3s all;
+    width: 250px;
+  }
+</style>

@@ -1,0 +1,35 @@
+<svelte:head>
+  <title>{status}</title>
+</svelte:head>
+
+<main>
+  <h1>{error.message}</h1>
+  {#if dev && error.stack}
+    <pre>{error.stack}</pre>
+  {/if}
+</main>
+
+<style>
+  main {
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  pre {
+    background: rgba(0, 0, 0, 0.54);
+    border-radius: 3px;
+    overflow: scroll;
+    padding: 24px;
+  }
+</style>
+
+<script>
+  export default {
+    helpers: {
+      dev: process.env.NODE_ENV === 'development'
+    }
+  };
+</script>

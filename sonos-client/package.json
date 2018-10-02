@@ -1,0 +1,27 @@
+{
+  "name": "sonos-client",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "NODE_ENV=development sapper dev --dev-port 5000",
+    "build": "NODE_ENV=production sapper build",
+    "export": "NODE_ENV=production sapper export",
+    "start": "NODE_ENV=production node __sapper__/build"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "graphql-tag": "^2.10.0",
+    "lodash": "^4.17.11",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "bufferutil": "^4.0.0",
+    "npm-run-all": "^4.1.2",
+    "sapper": "^0.22.1",
+    "svelte": "^2.0.0",
+    "svelte-loader": "^2.9.0",
+    "utf-8-validate": "^5.0.1",
+    "webpack": "^4.7.0",
+    "webpack-node-externals": "^1.7.2"
+  }
+}

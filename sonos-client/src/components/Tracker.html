@@ -1,0 +1,47 @@
+<section>
+  <CoverArt track={track} />
+  <menu>
+    <PrevButton group={group}/>
+    <PlayPause group={group} isPlaying={track.isPlaying} />
+    <NextButton group={group} />
+  </menu>
+  <Progress position={track.position} duration={track.duration} isPlaying={track.isPlaying} />
+</section>
+
+<script>
+  export default {
+    data() {
+      return {
+        track: {
+          position: 0,
+          duration: 0
+        }
+      }
+    },
+    components: {
+      CoverArt: './CoverArt.html',
+      Progress: './Progress.html',
+      PlayPause: './PlayPause.html',
+      NextButton: './NextButton.html',
+      PrevButton: './PrevButton.html'
+    }
+  }
+</script>
+
+<style>
+  section {
+    flex-grow: 1;
+    padding-top: 8px;
+    position: relative;
+    text-align: right;
+  }
+
+  menu {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 0;
+    width: 100%;
+  }
+</style>

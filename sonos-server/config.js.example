@@ -1,0 +1,23 @@
+module.exports = {
+  domain: process.env.SONOS_DOMAIN
+  port: process.env.PORT,
+  // Generate this using `yarn secret`
+  secret: process.env.SECRET,
+  // Populate these credentials by creating a Sonos controller app:
+  // https://integration.sonos.com/integrations
+  sonos: {
+    clientId: process.env.SONOS_CLIENT_ID
+    clientSecret: process.env.SONOS_CLIENT_SECRET,
+    authCallbackPath: process.env.SONOS_AUTH_CALLBACK_PATH,
+    eventCallbackPath: process.env.SONOS_EVENT_CALLBACK_PATH
+  },
+  // Populate these credentials by creating a Pusher app:
+  // https://pusher.com/docs/javascript_quick_start
+  pusher: {
+    appId: process.env.PUSHER_ID,
+    key: process.env.PUSHER_KEY,
+    secret: process.env.PUSHER_SECRET,
+    cluster: 'us2',
+    encrypted: true
+  }
+};

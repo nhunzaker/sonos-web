@@ -1,0 +1,26 @@
+{
+  "name": "sonos-server",
+  "private": true,
+  "main": "./index.js",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nodemon boot.js"
+  },
+  "dependencies": {
+    "apollo-server": "^2.1.0",
+    "apollo-server-express": "^2.1.0",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "dataloader": "^1.4.0",
+    "express": "^4.16.3",
+    "graphql": "^14.0.2",
+    "passport": "^0.4.0",
+    "passport-oauth2": "^1.4.0",
+    "passport-oauth2-refresh": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}

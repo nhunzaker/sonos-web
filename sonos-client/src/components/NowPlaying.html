@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="backdrop" aria-hidden="true" style="background-image: url({track.image});"></div>
+  <Tracker group={group} track={track} />
+</div>
+
+<script>
+  import { get } from 'lodash'
+
+  export default {
+    data() {
+      return {
+        group: {
+          name: 'No group active',
+          progress: 0,
+          duration: 0
+        },
+        status: null,
+        meta: null
+      }
+    },
+
+    computed: {
+      track: ({ status, meta }) => {
+        return {
+          isPlaying: get(status, 'playbackState') === 'PLAYBACK_STATE_PLAYING',
+          canDisplay: meta !== null,
+          title: get(meta, 'currentItem.track.name', ''),
+          image: get(meta, 'currentItem.track.imageUrl', ''),
+          artist: get(meta, 'currentItem.track.artist.name', ''),
+          position: get(status, 'positionMillis', 0),
+          duration: get(meta, 'currentItem.track.durationMillis', 0),
+          status: get(status, 'playbackState'),
+          service: get(meta, 'currentItem.track.service.name', ''),
+        }
+      }
+    },
+
+    oncreate() {
+      const { group } = this.get()
+      const { socket } = this.store.get()
+
+      this.channel = socket.subscribe(btoa(`groupId-${group.id}`))
+
+      this.channel.bind('playbackStatus', status => {
+        this.set({ status })
+      })
+
+      this.channel.bind('metadataStatus', meta => {
+        this.set({ meta })
+      })
+
+      fetch(`/rest/groups/${group.id}/playback/subscription`, { method: 'POST' })
+      fetch(`/rest/groups/${group.id}/playbackMetadata/subscription`, { method: 'POST' })
+    },
+
+    ondestroy() {
+      const { group } = this.get()
+      const { socket } = this.store.get()
+
+      this.channel.disconnect()
+    },
+
+    components: {
+      Tracker: './Tracker.html'
+    }
+  }
+</script>
+
+<style>
+  .container {
+    align-items: center;
+    background: #131313;
+    color: white;
+    display: flex;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 100%;
+  }
+
+  .backdrop {
+    filter: blur(20px) brightness(0.3);
+    background-size: cover;
+    background-position: 50% 50%;
+    transition: 0.4s all;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform: scale(1.25);
+    width: 100%;
+  }
+</style>

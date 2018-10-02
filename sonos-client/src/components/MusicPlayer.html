@@ -1,0 +1,81 @@
+<main>
+  <NowPlaying group={group} />
+</main>
+
+<footer>
+  {#if houses.length > 1}
+    <select name="house" class="dropdown">
+      {#each houses as house}
+        <option>{house.id}</option>
+      {/each}
+    </select>
+  {/if}
+  {#if groups.length > 1}
+    <select name="group" class="dropdown">
+      {#each groups as group}
+        <option value={group.id}>{group.name}</option>
+      {/each}
+    </select>
+  {/if}
+</footer>
+
+<script>
+  export default {
+    components: {
+      NowPlaying: '../components/NowPlaying.html'
+    },
+
+    data() {
+      return {
+        houses: [],
+        group: null,
+        house: null
+      }
+    },
+
+    computed: {
+      house: ({ houses }) => houses[0],
+      groups: ({ houses }) => houses.length ? houses[0].groups : [],
+      group: ({ houses }) => houses.length ? houses[0].groups[0] : {}
+    }
+  };
+</script>
+
+<style>
+  main {
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+  }
+
+  footer {
+    flex-shrink: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 4px;
+    width: 100%;
+  }
+
+  select {
+    background: transparent;
+    border-radius: 3px;
+    padding: 4px 8px 4px 4px;
+    border: 0;
+    color: white;
+    display: block;
+    font: inherit;
+    font-size: 0.8em;
+    opacity: 0.54;
+    margin: 4px;
+    margin-right: 24px;
+    text-align: right;
+    transition: 0.3s all;
+  }
+
+  select:hover,
+  select:focus{
+    background: #000;
+    opacity: 1;
+  }
+</style>

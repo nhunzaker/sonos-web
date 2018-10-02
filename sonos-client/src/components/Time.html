@@ -1,0 +1,22 @@
+{displayString}
+
+<script>
+  function toDisplayString(value) {
+    let rawSeconds = Math.round(value / 1000)
+    let minutes = Math.floor(rawSeconds / 60);
+    let seconds = `${rawSeconds % 60}`.padStart(2, "0");
+
+    return `${minutes}:${seconds}`;
+  }
+
+  export default {
+    data() {
+      return {
+        value: 0
+      }
+    },
+    computed: {
+      displayString: ({ value }) => toDisplayString(value)
+    }
+  }
+</script>
