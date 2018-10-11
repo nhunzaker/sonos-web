@@ -10,7 +10,7 @@ export async function request(scope, query, variables) {
   });
 
   if (response.ok === false) {
-    throw response;
+    throw new Error(`${response.status} ${response.statusText}`);
   }
 
   // TODO: This doesn't handle errors
@@ -30,7 +30,7 @@ export async function mutate(query, variables) {
   });
 
   if (response.ok === false) {
-    throw response;
+    throw new Error(`${response.status} ${response.statusText}`);
   }
 
   // TODO: This doesn't handle errors

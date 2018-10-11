@@ -8,8 +8,9 @@ const passport = require("passport");
 const refresh = require("passport-oauth2-refresh");
 const { Strategy } = require("passport-oauth2");
 const url = require("url");
+const config = require("config");
+
 const oauth = express();
-const config = require("./config");
 
 function authorization() {
   const { clientId, clientSecret } = config.sonos;
@@ -57,6 +58,11 @@ refresh.use(authStrategy);
 oauth.use(passport.initialize());
 oauth.use(passport.session());
 
+oauth.get("/login", (req, res, next) => {
+  // Someone should answer...
+  next();
+});
+
 oauth.get(
   "/auth",
   passport.authenticate("oauth2", {
@@ -72,6 +78,11 @@ function ensureAuthenticated(req, res, next) {
   const user = req.user || {};
   const refreshToken = user.refresh;
   const expired = userExpired(req.user);
+
+  // Avoid redirect loops trying to authenticate...
+  if (req.path === '/login') {
+    return next()
+  }
 
   if (req.isAuthenticated() && !expired) {
     return next();

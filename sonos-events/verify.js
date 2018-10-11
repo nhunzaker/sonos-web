@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const { urlsafeEncode64 } = require("text/lib/text");
+const { sonos, pusher } = require('config');
 
 /**
  * Player information comes in the form of subscription callbacks.
@@ -15,8 +16,8 @@ exports.verify = function verify(request, response, next) {
     request.headers["x-sonos-type"],
     request.headers["x-sonos-target-type"],
     request.headers["x-sonos-target-value"],
-    request.app.get("clientId"),
-    request.app.get("clientSecret")
+    sonos.clientId,
+    sonos.clientSecret
   ].join("");
 
   let sha = crypto.createHash("sha256");

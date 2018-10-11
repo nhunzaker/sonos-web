@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const config = require("sapper/config/webpack.js");
 const pkg = require("./package.json");
-const serverConfig = require("sonos-server/config");
+const serverConfig = require("config");
 const mode = process.env.NODE_ENV;
 const dev = mode === "development";
 
@@ -54,8 +54,9 @@ module.exports = {
       mainFields: ["svelte", "main"]
     },
     externals: [
-      require("webpack-node-externals")(),
       "express",
+      "apollo-server",
+      "graphql",
       "encoding",
       "node-gyp-build",
       "pusher"

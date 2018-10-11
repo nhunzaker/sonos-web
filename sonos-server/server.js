@@ -2,9 +2,10 @@ const express = require("express");
 const cookies = require("cookie-parser");
 const session = require("cookie-session");
 const bodyParser = require("body-parser");
-const { oauth, ensureAuthenticated } = require("./oauth");
-const config = require("./config");
+const config = require("config");
 const path = require("path");
+
+const { oauth, ensureAuthenticated } = require("./oauth");
 
 const app = express();
 

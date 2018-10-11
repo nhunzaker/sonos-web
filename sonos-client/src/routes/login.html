@@ -2,4 +2,52 @@
   <title>Login</title>
 </svelte:head>
 
-<a href="/auth">Please authenticate with Sonos</a>
+<div class="center">
+<main>
+  <div class="body">
+    <p>Please login with Sonos to begin.</p>
+  </div>
+  <footer>
+    <a href="/auth">Login with Sonos</a>
+  </footer>
+</main>
+</div>
+
+<style>
+  .center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  main {
+    background: white;
+    border-radius: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    color :#222;
+    margin: 40px auto;
+  }
+
+  .body {
+    padding: 24px;
+  }
+
+  a {
+    background: #3859ac;
+    color: white;
+    cursor: pointer;
+    display: block;
+    font-weight: 500;
+    padding: 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.2s all;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  }
+
+  a:hover,
+  a:focus {
+    background: #f157ff;
+  }
+</style>

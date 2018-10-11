@@ -18,6 +18,8 @@ module.exports = {
     key: process.env.PUSHER_KEY,
     secret: process.env.PUSHER_SECRET,
     cluster: 'us2',
-    encrypted: true
+    encrypted: true,
+    presenceCallbackPath: process.env.PUSHER_PRESENCE_CALLBACK_PATH
+    authCallbackPath: process.env.PUSHER_AUTH_CALLBACK_PATH
   }
 };

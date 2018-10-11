@@ -39,7 +39,9 @@
       const { group } = this.get()
       const { socket } = this.store.get()
 
-      this.channel = socket.subscribe(btoa(`groupId-${group.id}`))
+      const name = 'presence-' + btoa(`groupId_${group.id}`)
+
+      this.channel = socket.subscribe(name);
 
       this.channel.bind('playbackStatus', status => {
         this.set({ status })
