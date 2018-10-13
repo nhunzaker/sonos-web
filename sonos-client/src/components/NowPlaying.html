@@ -39,27 +39,29 @@
       const { group } = this.get()
       const { socket } = this.store.get()
 
-      const name = 'presence-' + btoa(`groupId_${group.id}`)
+      const name = 'presence-' + btoa(`group-playbackStatus-${group.id}`)
 
-      this.channel = socket.subscribe(name);
+      this.playback = socket.subscribe('presence-' + btoa(`groupId-playbackStatus-${group.id}`))
+      this.metadata = socket.subscribe('presence-' + btoa(`groupId-metadataStatus-${group.id}`))
 
-      this.channel.bind('playbackStatus', status => {
+      this.playback.bind('update', status => {
         this.set({ status })
       })
 
-      this.channel.bind('metadataStatus', meta => {
+      this.metadata.bind('update', meta => {
         this.set({ meta })
       })
 
-      fetch(`/rest/groups/${group.id}/playback/subscription`, { method: 'POST' })
-      fetch(`/rest/groups/${group.id}/playbackMetadata/subscription`, { method: 'POST' })
+      /* fetch(`/rest/groups/${group.id}/playback/subscription`, { method: 'POST' })
+       * fetch(`/rest/groups/${group.id}/playbackMetadata/subscription`, { method: 'POST' }) */
     },
 
     ondestroy() {
       const { group } = this.get()
       const { socket } = this.store.get()
 
-      this.channel.disconnect()
+      this.playback.disconnect()
+      this.metadata.disconnect()
     },
 
     components: {

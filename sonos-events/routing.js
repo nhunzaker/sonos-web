@@ -7,17 +7,13 @@ exports.router = function router(request, response) {
   // id: request.headers["x-sonos-event-seq-id"],
   // household: request.headers["x-sonos-household-id"]
 
-  const targetType = request.headers["x-sonos-target-type"];
-  const targetValue = request.headers["x-sonos-target-value"];
+  const object = request.headers["x-sonos-target-type"];
+  const type = request.headers["x-sonos-type"];
+  const id = request.headers["x-sonos-target-value"];
 
-  const body = {
-    type: request.headers["x-sonos-type"],
-    payload: request.body
-  };
+  const name = toChannel(object, type, id);
 
-  const name = toChannel(targetType, targetValue);
-
-  pusher.trigger(name, body.type, request.body);
+  pusher.trigger(name, "update", request.body);
 
   // Let Sonos know everything is okay
   response.status(200).send(null);

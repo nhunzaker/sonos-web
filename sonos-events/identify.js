@@ -15,15 +15,11 @@ const algorithm = "aes-256-ctr";
 const password = config.pusher.decryptSecret;
 
 function identify(request, response) {
-  var socketId = request.body.socket_id;
-  var channel = request.body.channel_name;
+  const { socket_id, channel_name } = request.body;
 
-  var presenceData = {
-    user_id: encrypt(request.user.token),
-    user_info: {}
-  };
-
-  var auth = pusher.authenticate(socketId, channel, presenceData);
+  var auth = pusher.authenticate(socket_id, channel_name, {
+    user_id: encrypt(request.user.token)
+  });
 
   response.send(auth);
 }
