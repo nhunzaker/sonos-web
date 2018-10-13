@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="backdrop" aria-hidden="true" style="background: url({track.image}) 50% 50% no-repeat /cover;"></div>
+<div ref:container>
+  <GracefulImage images={track.images} blur />
   <Tracker group={group} track={track} />
 </div>
 
@@ -27,13 +27,16 @@
           canSkipBack: get(status, 'availablePlaybackActions.canSkipBack'),
           canDisplay: meta !== null,
           title: get(meta, 'currentItem.track.name', ''),
-          image: get(meta, 'currentItem.track.imageUrl', ''),
           artist: get(meta, 'currentItem.track.artist.name', ''),
           album: get(meta, 'currentItem.track.album.name', ''),
           position: get(status, 'positionMillis', 0),
           duration: get(meta, 'currentItem.track.durationMillis', 0),
           status: get(status, 'playbackState'),
           service: get(meta, 'currentItem.track.service.name', ''),
+          images: [
+            get(meta, 'currentItem.track.imageUrl'),
+            get(meta, 'container.imageUrl')
+          ]
         }
       }
     },
@@ -63,13 +66,14 @@
     },
 
     components: {
-      Tracker: './Tracker.html'
+      Tracker: './Tracker.html',
+      GracefulImage: './GracefulImage.html'
     }
   }
 </script>
 
 <style>
-  .container {
+  ref:container {
     align-items: center;
     background: #131313;
     color: white;
@@ -79,17 +83,6 @@
     overflow: hidden;
     padding: 0;
     position: relative;
-    width: 100%;
-  }
-
-  .backdrop {
-    filter: blur(17px) brightness(0.3) saturate(1.6);
-    transition: 0.4s all;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    transform: scale(1.25);
     width: 100%;
   }
 </style>

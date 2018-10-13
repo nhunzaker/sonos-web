@@ -1,0 +1,75 @@
+<div ref:graphic
+  class:blur="blur"
+  style="background: url({displayed}) 50% 50% no-repeat / cover" />
+
+{#if src}
+  <img on:load="updateImage(event)" on:error="fallback()" src={src} alt={alt} hidden>
+{/if}
+
+<script>
+  export default {
+    data() {
+      return {
+        alt: '',
+        blur: false,
+        fade: false,
+        displayed: '',
+        index: 0,
+        images: [],
+      }
+    },
+
+    onupdate(changes) {
+      if ('images' in changes) {
+        this.set({ index: 0 })
+      }
+    },
+
+    computed: {
+      src: ({ index, images }) => images[index] || ''
+    },
+
+    methods: {
+      updateImage(event) {
+        this.set({ displayed: event.target.src })
+      },
+      fallback() {
+        const { index, images } = this.get()
+
+        this.set({
+          index: Math.min(index + 1, images.length - 1, 0)
+        })
+      }
+    }
+  }
+</script>
+
+<style>
+  /**
+   * This image is a utility for a smooth loading experience. It is
+   * hidden from the page otherwise.
+   */
+  img {
+    opacity:0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  ref:graphic {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: 0.4s all;
+    width: 100%;
+  }
+
+  .blur {
+    filter: blur(17px) brightness(0.3) saturate(1.6);
+    transform: scale(1.25);
+  }
+</style>

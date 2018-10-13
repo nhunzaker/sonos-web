@@ -1,6 +1,6 @@
 <figure>
-  <div class="frame" style="background: url({displayedImage}) 50% 50% no-repeat / cover;">
-    <img on:load="updateImage(event)" src={track.image} alt={track.album}>
+  <div class="frame">
+    <GracefulImage images={track.images} alt={track.album} blur={false} />
   </div>
 
   <figcaption>
@@ -13,21 +13,18 @@
   export default {
     data() {
       return {
-        displayedImage: '',
         track: {
           title: '',
           album: '',
           artist: '',
-          image: '',
+          images: [],
           service: ''
         }
       }
     },
 
-    methods: {
-      updateImage(event) {
-        this.set({ displayedImage: event.target.src })
-      }
+    components: {
+      GracefulImage: './GracefulImage.html'
     }
   }
 </script>
@@ -36,15 +33,17 @@
   figure {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding-top: 120px;
     flex: 1 1;
+    justify-content: center;
+    margin: 0;
+    /* right now this is to pad the top menu. total hack */
+    padding: 48px 0 0;
     text-align: center;
   }
 
   figcaption {
     font-weight: 500;
-    margin: 30px auto;
+    margin: 32px auto 8px;
   }
 
   figcaption p {
@@ -58,34 +57,42 @@
   }
 
   .frame {
-    flex: 0 1;
     align-items: center;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.17);
     display: flex;
+    filter: saturate(1.2);
+    flex: 0 1;
     justify-content: center;
-    max-width: 300px;
-    width: 100%;
     margin: 0 auto;
+    max-width: 450px;
+    overflow: hidden;
     position: relative;
     transition: 0.4s all;
+    width: 100%;
   }
 
+  /**
+   * Maintains 1:1 aspect ratio
+   */
   .frame:before {
     content: "";
     display: block;
     padding-top: 100%;
     width: 100%;
+    z-index: 1;
   }
 
-  img {
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    transition: 0.3s all;
+  /**
+   * Adds a sharp edge around the album to make it pop
+   */
+  .frame:after {
+    border: 1px solid rgba(255, 255, 255, 0.27);
+    content: "";
     position: absolute;
+    mix-blend-mode: overlay;
+    top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    opacity: 0;
   }
 </style>
