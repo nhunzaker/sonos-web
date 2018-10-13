@@ -2,7 +2,7 @@
   <NowPlaying group={group} />
 </main>
 
-<footer>
+<menu>
   {#if houses.length > 1}
     <select name="house" class="dropdown">
       {#each houses as house}
@@ -17,7 +17,7 @@
       {/each}
     </select>
   {/if}
-</footer>
+</menu>
 
 <script>
   export default {
@@ -48,12 +48,14 @@
     width: 100%;
   }
 
-  footer {
+  menu {
     flex-shrink: 0;
+    margin: 0;
     position: absolute;
-    bottom: 0;
+    top: 4px;
     left: 0;
     padding: 4px;
+    text-align: center;
     width: 100%;
   }
 
@@ -63,12 +65,11 @@
     padding: 4px 8px 4px 4px;
     border: 0;
     color: white;
-    display: block;
+    display: inline-block;
     font: inherit;
     font-size: 0.8em;
     opacity: 0.54;
-    margin: 4px;
-    margin-right: 24px;
+    margin: 4px 8px;
     text-align: right;
     transition: 0.3s all;
   }

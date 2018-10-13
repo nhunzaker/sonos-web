@@ -39,7 +39,7 @@ module.exports = {
       new webpack.DefinePlugin({
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
-        "process.env.PUSHER_KEY": JSON.stringify(serverConfig.pusher.key)
+        "process.env.PUSHER_KEY": JSON.stringify(serverConfig.get("pusher.key"))
       })
     ].filter(Boolean),
     devtool: dev && "inline-source-map"
@@ -55,19 +55,18 @@ module.exports = {
     },
     externals: [
       "express",
-      "apollo-server",
-      "graphql",
+      "morgan",
+      "config",
       "encoding",
       "node-gyp-build",
-      "pusher"
+      "pusher",
+      "sonos-server",
+      "sonos-oauth",
+      "sonos-events",
+      "config"
     ],
     module: {
       rules: [
-        {
-          test: /\.(graphql|gql)$/,
-          exclude: /node_modules/,
-          loader: "graphql-tag/loader"
-        },
         {
           test: /\.html$/,
           use: {

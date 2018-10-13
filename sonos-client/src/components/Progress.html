@@ -30,7 +30,8 @@
       }
     },
     computed: {
-      current: ({ position, offset }) => Math.round(position + offset)
+      current: ({ position, duration, offset }) =>
+        Math.min(Math.round(position + offset), duration)
     },
     ondestroy() {
       clearTimeout(this.timer)
@@ -47,8 +48,9 @@
     display: flex;
     font-size: 0.7rem;
     justify-content: center;
-    margin: 8px auto;
-    max-width: 400px;
+    padding: 12px 24px 24px;
+    margin: 0 auto;
+    max-width: 768px;
     width: 100%;
   }
 

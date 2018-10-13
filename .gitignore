@@ -1,3 +1,5 @@
 node_modules
 yarn-error.log
-sonos-client/__sapper__
+sonos-client/__sapper__/*
+.env
+.env.prod

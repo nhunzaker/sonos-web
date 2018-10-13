@@ -1,72 +1,20 @@
-const { ApolloServer } = require("apollo-server-express");
-
-const config = require("config");
-const { sonosClient } = require("networking");
-
-const app = require("./server");
-const typeDefs = require("./typeDefs");
-const resolvers = require("./resolvers");
-const loaders = require("./loaders");
-const { SonosError } = require("./sonos-error");
-
-exports.authenticated = require("./oauth").ensureAuthenticated;
+const express = require("express");
+const { OAuth, authenticated } = require("sonos-oauth");
+const { GraphQLServer } = require("./graphql-server");
+const { restRoutes } = require("./rest");
+const bodyParser = require("body-parser");
 
 exports.Api = function() {
-  const apollo = new ApolloServer({
-    typeDefs,
-    resolvers,
-    graphiql: true,
-    context({ req }) {
-      const sonos = sonosClient(req.user.token);
+  const app = express();
+  const graphql = new GraphQLServer();
 
-      return {
-        sonos,
-        loaders: loaders(sonos)
-      };
-    }
-  });
+  app.use(bodyParser.json());
+  app.use(OAuth());
+  app.use("/api", authenticated);
 
-  apollo.applyMiddleware({ app, path: "/api" });
+  graphql.applyMiddleware({ app, path: "/api" });
 
-  /**
-   * This is pretty hacky, but a great way to test Sonos API endpoints
-   */
-  app.get("/rest/*", exports.authenticated, async (req, res, next) => {
-    const sonos = sonosClient(req.user.token);
-    const path = req.path.slice("/rest".length);
-
-    try {
-      let { data } = await sonos.get(path);
-      res.json(data);
-    } catch (error) {
-      next(error);
-    }
-  });
-
-  app.post("/rest/*", exports.authenticated, async (req, res) => {
-    const sonos = sonosClient(req.user.token);
-    const path = req.path.slice("/rest".length);
-
-    try {
-      let { data } = await sonos.post(path, req.body);
-      res.json(data);
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        res
-          .status(error.response.status)
-          .send(new SonosError(error.response.data));
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        throw error.request;
-      } else {
-        res.status(500).send(error.message);
-      }
-    }
-  });
+  restRoutes(app);
 
   return app;
 };

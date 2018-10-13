@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Deploy
+now --dotenv .env.prod
+
+# Alias last deploy
+now alias
+
+# Remove stale instances
+now rm sonos --safe --yes

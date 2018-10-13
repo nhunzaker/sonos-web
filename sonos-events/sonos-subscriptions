@@ -1,44 +1,8 @@
-/**
- * We should be good citizens with the Sonos API. It was graciously given
- * to us.
- *
- * So only subscribe to callbacks when we have them, and delete them when
- * no-one cares.
- */
-
 const { sonosClient } = require("networking");
 
 const { pusher } = require("./pusher-client");
 const { fromChannel } = require("./channels");
 const { decrypt } = require("./encryption");
-
-function subscription(request, response) {
-  // TODO: This is important because we need to run a checksum
-  // to verify the contents, but express doesn't support request.rawBody
-  // with the body-parser module :(
-  //  const webhook = pusher.webhook(request)
-  //
-  // if (webhook.isValid() === false) {
-  //   response.status(422).send();
-  //   return
-  // }
-  response.status(204).send();
-
-  const { time, events } = request.body;
-
-  for (let event of events) {
-    const token = decrypt(event.user_id);
-
-    switch (event.name) {
-      case "member_added":
-        subscribe(event.channel, token);
-        break;
-      case "member_removed":
-        unsubscribe(event.channel, token);
-        break;
-    }
-  }
-}
 
 async function subscribe(channel, token) {
   const { object, id, type } = fromChannel(channel);
@@ -98,4 +62,4 @@ function mapType(type) {
   }
 }
 
-module.exports = { subscribe, subscription };
+module.exports = { subscribe, unsubscribe };

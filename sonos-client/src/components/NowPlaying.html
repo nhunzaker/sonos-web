@@ -1,10 +1,10 @@
 <div class="container">
-  <div class="backdrop" aria-hidden="true" style="background-image: url({track.image});"></div>
+  <div class="backdrop" aria-hidden="true" style="background: url({track.image}) 50% 50% no-repeat /cover;"></div>
   <Tracker group={group} track={track} />
 </div>
 
 <script>
-  import { get } from 'lodash'
+  import get from 'lodash/get'
 
   export default {
     data() {
@@ -23,10 +23,13 @@
       track: ({ status, meta }) => {
         return {
           isPlaying: get(status, 'playbackState') === 'PLAYBACK_STATE_PLAYING',
+          canSkip: get(status, 'availablePlaybackActions.canSkip'),
+          canSkipBack: get(status, 'availablePlaybackActions.canSkipBack'),
           canDisplay: meta !== null,
           title: get(meta, 'currentItem.track.name', ''),
           image: get(meta, 'currentItem.track.imageUrl', ''),
           artist: get(meta, 'currentItem.track.artist.name', ''),
+          album: get(meta, 'currentItem.track.album.name', ''),
           position: get(status, 'positionMillis', 0),
           duration: get(meta, 'currentItem.track.durationMillis', 0),
           status: get(status, 'playbackState'),
@@ -39,8 +42,6 @@
       const { group } = this.get()
       const { socket } = this.store.get()
 
-      const name = 'presence-' + btoa(`group-playbackStatus-${group.id}`)
-
       this.playback = socket.subscribe('presence-' + btoa(`groupId-playbackStatus-${group.id}`))
       this.metadata = socket.subscribe('presence-' + btoa(`groupId-metadataStatus-${group.id}`))
 
@@ -51,9 +52,6 @@
       this.metadata.bind('update', meta => {
         this.set({ meta })
       })
-
-      /* fetch(`/rest/groups/${group.id}/playback/subscription`, { method: 'POST' })
-       * fetch(`/rest/groups/${group.id}/playbackMetadata/subscription`, { method: 'POST' }) */
     },
 
     ondestroy() {
@@ -76,6 +74,7 @@
     background: #131313;
     color: white;
     display: flex;
+    flex-direction: column;
     margin: 0;
     overflow: hidden;
     padding: 0;
@@ -84,9 +83,7 @@
   }
 
   .backdrop {
-    filter: blur(20px) brightness(0.3);
-    background-size: cover;
-    background-position: 50% 50%;
+    filter: blur(17px) brightness(0.3) saturate(1.6);
     transition: 0.4s all;
     height: 100%;
     left: 0;

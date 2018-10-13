@@ -5,7 +5,8 @@
  * However this documentation does not appear to be complete. Some
  * errors handled in this class are undocumented.
  */
-export class SonosError extends Error {
+
+class SonosError extends Error {
   constructor(errorObject) {
     switch (errorObject.errorCode) {
       case "ERROR_RESOURCE_GONE":
@@ -44,3 +45,5 @@ export class SonosError extends Error {
     this.reason = errorObject.reason;
   }
 }
+
+module.exports = { SonosError };

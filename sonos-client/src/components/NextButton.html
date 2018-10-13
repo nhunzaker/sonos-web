@@ -1,7 +1,7 @@
 <form on:submit="next(event)">
-  <button>
+  <button disabled={disabled}>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <title>Next</title>
+      <title>{disabled ? "End of queue" : "Next"}</title>
       <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
       <path d="M0 0h24v24H0z" fill="none" />
     </svg>
@@ -12,6 +12,11 @@
   import { Next } from '../mutations'
 
   export default {
+    data() {
+      return {
+        disabled: false
+      }
+    },
     methods: {
       next(event) {
         let { group } = this.get()
@@ -42,6 +47,11 @@
   button:focus {
     opacity: 1;
     transition: 0.12s all;
+  }
+
+  button[disabled] {
+    opacity: 0.1;
+    cursor: cancel;
   }
 
   button svg {

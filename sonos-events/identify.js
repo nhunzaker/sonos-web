@@ -7,12 +7,8 @@
  */
 
 const { pusher } = require("./pusher-client");
-
-const crypto = require("crypto");
-const config = require("config");
-
-const algorithm = "aes-256-ctr";
-const password = config.pusher.decryptSecret;
+const { subscribe } = require("./subscription");
+const { encrypt } = require("./encryption");
 
 function identify(request, response) {
   const { socket_id, channel_name } = request.body;
@@ -22,24 +18,11 @@ function identify(request, response) {
   });
 
   response.send(auth);
+
+  // For the reconnect case, start subscribing to the related channel
+  setTimeout(function() {
+    subscribe(channel_name, request.user.token);
+  }, 1000);
 }
 
-function encrypt(text) {
-  var cipher = crypto.createCipher(algorithm, password);
-  var crypted = cipher.update(text, "utf8", "hex");
-
-  crypted += cipher.final("hex");
-
-  return crypted;
-}
-
-function decrypt(text) {
-  var decipher = crypto.createDecipher(algorithm, password);
-  var dec = decipher.update(text, "hex", "utf8");
-
-  dec += decipher.final("utf8");
-
-  return dec;
-}
-
-module.exports = { identify, encrypt, decrypt };
+module.exports = { identify };

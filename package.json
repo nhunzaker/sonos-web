@@ -3,19 +3,22 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "yarn workspace sonos-client start",
-    "start:dev": "yarn workspace sonos-client dev",
-    "start:client": "yarn workspace sonos-client start",
-    "format": "prettier --write {sonos-client,sonos-server,sonos-events}/**/*.js ./*.js",
-    "secret": "node -p \"console.log(require('crypto').randomBytes(64).toString('hex'))\"",
-    "build": "yarn workspace sonos-client build"
+    "start": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client start",
+    "start:dev": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client dev",
+    "start:client": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client start",
+    "format": "prettier --write '**/*.js'",
+    "secret": "node -p \"require('crypto').randomBytes(64).toString('hex')\"",
+    "build": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client build"
   },
   "dependencies": {
+    "dotenv": "^6.1.0"
+  },
+  "devDependencies": {
     "prettier": "^1.14.3"
   },
   "workspaces": [
-    "config",
     "networking",
+    "sonos-oauth",
     "sonos-server",
     "sonos-events",
     "sonos-client"

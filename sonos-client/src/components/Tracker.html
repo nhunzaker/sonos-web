@@ -1,9 +1,9 @@
 <section>
   <CoverArt track={track} />
   <menu>
-    <PrevButton group={group}/>
+    <PrevButton group={group} disabled={!track.canSkipBack} />
     <PlayPause group={group} isPlaying={track.isPlaying} />
-    <NextButton group={group} />
+    <NextButton group={group} disabled={!track.canSkip} />
   </menu>
   <Progress position={track.position} duration={track.duration} isPlaying={track.isPlaying} />
 </section>
@@ -31,16 +31,19 @@
 <style>
   section {
     flex-grow: 1;
-    padding-top: 8px;
     position: relative;
     text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
   }
 
   menu {
     align-items: center;
     display: flex;
     justify-content: center;
-    margin: 20px 0;
+    margin: 20px 0 0;
     padding: 0;
     width: 100%;
   }

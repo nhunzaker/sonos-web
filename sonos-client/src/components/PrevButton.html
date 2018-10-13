@@ -1,7 +1,7 @@
 <form on:submit="previous(event)">
-  <button>
+  <button disabled={disabled}>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <title>Previous</title>
+      <title>{disabled ? "No previous track" : "Previous"}</title>
       <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
       <path d="M0 0h24v24H0z" fill="none" />
     </svg>
@@ -12,6 +12,11 @@
   import { Previous } from '../mutations'
 
   export default {
+    data() {
+      return {
+        disabled: false
+      }
+    },
     methods: {
       previous(event) {
         let { group } = this.get()
@@ -42,6 +47,11 @@
   button:focus {
     opacity: 1;
     transition: 0.12s all;
+  }
+
+  button[disabled] {
+    opacity: 0.1;
+    cursor: cancel;
   }
 
   button svg {

@@ -1,7 +1,7 @@
 export async function request(scope, query, variables) {
   let response = await scope.fetch("/api", {
     headers: {
-      Cookie: scope.store.get().Cookie,
+      Cookie: scope.store.cookie,
       "Content-Type": "application/json",
       Accept: "application/json"
     },
