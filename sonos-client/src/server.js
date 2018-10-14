@@ -33,7 +33,9 @@ const sapperMiddleware = sapper.middleware({
   }
 });
 
-app.use(helmet());
+// Before enabling this, I need to figure out why cookies are required
+// to serve main content.
+// app.use(helmet());
 
 app.use(morgan("dev"));
 
