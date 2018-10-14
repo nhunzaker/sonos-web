@@ -1,10 +1,13 @@
 const refresh = require("passport-oauth2-refresh");
 
-const LOGIN_PATH = "/login";
+const UNAUTHENTICATED = ["/login", "/client/", "/service-worker.js"];
+
+function shouldSkipAuth(path) {
+  return UNAUTHENTICATED.some(route => path.startsWith(route));
+}
 
 function authenticated(req, res, next) {
-  // Avoid redirect loops trying to authenticate...
-  if (req.path === LOGIN_PATH) {
+  if (shouldSkipAuth(req.path)) {
     return next();
   }
 
@@ -32,7 +35,7 @@ function authenticated(req, res, next) {
     );
   } else {
     if (`${req.headers.accept}`.includes("text/html")) {
-      res.redirect(LOGIN_PATH);
+      res.redirect("/login");
     } else {
       res.status(401).send("You must be logged in");
     }
