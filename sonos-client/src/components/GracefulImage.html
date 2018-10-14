@@ -1,19 +1,21 @@
 <div ref:graphic
   class:blur="blur"
-  style="background: url({displayed}) 50% 50% no-repeat / cover" />
+  style="background: #040404 url({displayed}) 50% 50% no-repeat / cover;" />
 
 {#if src}
   <img on:load="updateImage(event)" on:error="fallback()" src={src} alt={alt} hidden>
 {/if}
 
 <script>
+  const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
   export default {
     data() {
       return {
         alt: '',
         blur: false,
         fade: false,
-        displayed: '',
+        displayed: BLANK,
         index: 0,
         images: [],
       }
@@ -26,7 +28,7 @@
     },
 
     computed: {
-      src: ({ index, images }) => images[index] || ''
+      src: ({ index, images }) => images[index] || BLANK
     },
 
     methods: {
