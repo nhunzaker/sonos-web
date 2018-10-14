@@ -9,7 +9,6 @@ const passport = require("passport");
 const refresh = require("passport-oauth2-refresh");
 const cookies = require("cookie-parser");
 const session = require("cookie-session");
-const bodyParser = require("body-parser");
 
 const { authenticated } = require("./authenticate");
 const { SonosStrategy } = require("./sonos-strategy");
@@ -34,9 +33,6 @@ function OAuth() {
       }
     })
   );
-
-  // Then we must parse the body coming from SONOS as JSON
-  app.use(bodyParser.json());
 
   const strategy = new SonosStrategy();
 

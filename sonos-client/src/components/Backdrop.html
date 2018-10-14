@@ -1,0 +1,19 @@
+<div ref:container>
+  <slot />
+</div>
+
+<style>
+  ref:container {
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  ref:container :global(*) {
+    filter: blur(17px) brightness(0.3) saturate(1.6);
+    transform: scale(1.25);
+  }
+</style>

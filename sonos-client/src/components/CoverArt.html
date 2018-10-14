@@ -4,8 +4,14 @@
   </div>
 
   <figcaption>
-    <p>{track.title} - {track.artist}</p>
-    <p class="secondary">via {track.service}</p>
+    <p>{track.title}</p>
+
+    <p class="secondary">
+      {track.artist}
+      {#if track.service}
+        via {track.service}
+      {/if}
+    </p>
   </figcaption>
 </figure>
 
@@ -64,7 +70,7 @@
     flex: 0 1;
     justify-content: center;
     margin: 0 auto;
-    max-width: 450px;
+    max-width: 50vh;
     overflow: hidden;
     position: relative;
     transition: 0.4s all;

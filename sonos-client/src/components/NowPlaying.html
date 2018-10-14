@@ -1,10 +1,11 @@
-<div ref:container>
-  <GracefulImage images={track.images} blur />
-  <Tracker group={group} track={track} />
-</div>
+<Backdrop>
+  <GracefulImage images={track.images} />
+</Backdrop>
+
+<Tracker group={group} track={track} />
 
 <script>
-  import get from 'lodash/get'
+  import { Track } from '../data/track'
 
   export default {
     data() {
@@ -14,75 +15,27 @@
           progress: 0,
           duration: 0
         },
-        status: null,
-        meta: null
-      }
-    },
-
-    computed: {
-      track: ({ status, meta }) => {
-        return {
-          isPlaying: get(status, 'playbackState') === 'PLAYBACK_STATE_PLAYING',
-          canSkip: get(status, 'availablePlaybackActions.canSkip'),
-          canSkipBack: get(status, 'availablePlaybackActions.canSkipBack'),
-          canDisplay: meta !== null,
-          title: get(meta, 'currentItem.track.name', ''),
-          artist: get(meta, 'currentItem.track.artist.name', ''),
-          album: get(meta, 'currentItem.track.album.name', ''),
-          position: get(status, 'positionMillis', 0),
-          duration: get(meta, 'currentItem.track.durationMillis', 0),
-          status: get(status, 'playbackState'),
-          service: get(meta, 'currentItem.track.service.name', ''),
-          images: [
-            get(meta, 'currentItem.track.imageUrl'),
-            get(meta, 'container.imageUrl')
-          ]
-        }
+        track: Track.empty()
       }
     },
 
     oncreate() {
-      const { group } = this.get()
-      const { socket } = this.store.get()
+      let { group } = this.get()
+      let { socket } = this.store.get()
 
-      this.playback = socket.subscribe('presence-' + btoa(`groupId-playbackStatus-${group.id}`))
-      this.metadata = socket.subscribe('presence-' + btoa(`groupId-metadataStatus-${group.id}`))
+      this.track = new Track()
 
-      this.playback.bind('update', status => {
-        this.set({ status })
-      })
-
-      this.metadata.bind('update', meta => {
-        this.set({ meta })
-      })
+      this.track.open(group.id, socket, track => this.set({ track }))
     },
 
     ondestroy() {
-      const { group } = this.get()
-      const { socket } = this.store.get()
-
-      this.playback.disconnect()
-      this.metadata.disconnect()
+      this.track.close()
     },
 
     components: {
       Tracker: './Tracker.html',
-      GracefulImage: './GracefulImage.html'
+      GracefulImage: './GracefulImage.html',
+      Backdrop: './Backdrop.html'
     }
   }
 </script>
-
-<style>
-  ref:container {
-    align-items: center;
-    background: #131313;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    width: 100%;
-  }
-</style>

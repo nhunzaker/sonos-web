@@ -1,10 +1,9 @@
-<div ref:graphic
-  class:blur="blur"
-  style="background: #040404 url({displayed}) 50% 50% no-repeat / cover;" />
-
-{#if src}
-  <img on:load="updateImage(event)" on:error="fallback()" src={src} alt={alt} hidden>
-{/if}
+<div ref:graphic class:blur="blur"
+  style="background: #040404 url({displayed}) 50% 50% no-repeat / cover;">
+  {#if src}
+    <img on:load="updateImage(event)" on:error="fallback()" src={src} alt={alt} hidden>
+  {/if}
+</div>
 
 <script>
   const BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
@@ -14,7 +13,6 @@
       return {
         alt: '',
         blur: false,
-        fade: false,
         displayed: BLANK,
         index: 0,
         images: [],
@@ -52,13 +50,13 @@
    * hidden from the page otherwise.
    */
   img {
+    height: 0;
+    left: 0;
     opacity:0;
+    pointer-events: none;
     position: absolute;
     top: 0;
-    left: 0;
     width: 0;
-    height: 0;
-    pointer-events: none;
   }
 
   ref:graphic {
@@ -68,10 +66,5 @@
     top: 0;
     transition: 0.4s all;
     width: 100%;
-  }
-
-  .blur {
-    filter: blur(17px) brightness(0.3) saturate(1.6);
-    transform: scale(1.25);
   }
 </style>

@@ -12,9 +12,7 @@ exports.sonosCallback = function() {
   const app = express();
   const path = config.get("sonos.eventCallbackPath");
 
-  app.use(bodyParser.json());
-
-  app.post(path, verify, sendUpdate);
+  app.post(path, bodyParser.json(), verify, sendUpdate);
 
   return app;
 };
@@ -61,7 +59,7 @@ function sendUpdate(request, response) {
 
   pusher.trigger(channel, "update", request.body);
 
-  console.log("EMIT - %s-%s to %s", object, type, channel)
+  console.log("EMIT - %s-%s to %s", object, type, channel);
 }
 
 /**

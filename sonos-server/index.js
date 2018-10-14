@@ -2,13 +2,11 @@ const express = require("express");
 const { OAuth, authenticated } = require("sonos-oauth");
 const { GraphQLServer } = require("./graphql-server");
 const { restRoutes } = require("./rest");
-const bodyParser = require("body-parser");
 
 exports.Api = function() {
   const app = express();
   const graphql = new GraphQLServer();
 
-  app.use(bodyParser.json());
   app.use(OAuth());
   app.use("/api", authenticated);
 

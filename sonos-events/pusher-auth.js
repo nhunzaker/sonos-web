@@ -9,14 +9,17 @@ const { pusher } = require("./pusher-client");
 const { subscribe } = require("./sonos-subscriptions");
 
 exports.pusherAuth = function() {
-  const app = express();
-  const path = config.get("pusher.authCallbackPath");
+  let app = express();
+  let path = config.get("pusher.authCallbackPath");
 
-  // Following instructions for Pusher auth integration
-  // https://pusher.com/docs/authenticating_users
-  app.use(bodyParser.urlencoded({ extended: false }));
-
-  app.post(path, authenticated, identify);
+  app.post(
+    path,
+    authenticated,
+    // Following instructions for Pusher auth integration
+    // https://pusher.com/docs/authenticating_users
+    bodyParser.urlencoded({ extended: false }),
+    identify
+  );
 
   return app;
 };
@@ -29,7 +32,7 @@ exports.pusherAuth = function() {
  * a salt of the authentication token.
  */
 function identify(request, response) {
-  const { socket_id, channel_name } = request.body;
+  let { socket_id, channel_name } = request.body;
 
   var auth = pusher.authenticate(socket_id, channel_name, {
     // request.user.token comes from sonos-oauth.authenticated

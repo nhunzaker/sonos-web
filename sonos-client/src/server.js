@@ -36,9 +36,9 @@ app.use(morgan("dev"));
 
 app.use(express.static("static"));
 
-app.use(Api());
+app.use(Events());
 
-app.use(Events(sonos, pusher));
+app.use(Api());
 
 app.use(authenticated, sapperMiddleware);
 

@@ -4,8 +4,9 @@
  */
 
 const express = require("express");
-const config = require("config");
+const bodyParser = require("body-parser");
 
+const config = require("config");
 const { sonosClient } = require("networking");
 
 const { pusher } = require("./pusher-client");
@@ -14,27 +15,33 @@ const { decrypt } = require("./encryption");
 const { subscribe, unsubscribe } = require("./sonos-subscriptions");
 
 exports.pusherCallback = function() {
-  const app = express();
+  let app = express();
+  let path = config.get("pusher.presenceCallbackPath");
 
-  app.post(config.get("pusher.presenceCallbackPath"), handleCallback);
+  app.post(path, bodyParser.raw({ type: "application/json" }), handleCallback);
 
   return app;
 };
 
 function handleCallback(request, response) {
-  const webhook = pusher.webhook(request);
+  // Pusher webhook parsing requires a raw body. This is important to verify
+  // the contents of the payload to avoid man-in-the-middle attacks
+  //
+  // https://github.com/pusher/pusher-http-node#webhooks-1
+  let webhook = pusher.webhook({
+    headers: request.headers,
+    rawBody: request.body
+  });
 
   if (webhook.isValid() === false) {
-    response.status(422).send();
+    response.status(422).send("Invalid webhook");
     return;
   }
 
   response.status(204).send();
 
-  const { time, events } = request.body;
-
-  for (let event of events) {
-    const token = decrypt(event.user_id);
+  for (let event of webhook.getEvents()) {
+    let token = decrypt(event.user_id);
 
     switch (event.name) {
       case "member_added":
@@ -46,3 +53,14 @@ function handleCallback(request, response) {
     }
   }
 }
+
+/**
+ * Pusher webhook validation requires a rawBody field. That doesn't
+ * appear to be a thing with express requests. It could be because of
+ * the body-parser, but I haven't investigated too thoroughly.
+ *
+ * This middleware adds the field back, following the example from the
+ * pusher repo:
+ *
+ * https://github.com/pusher/pusher-http-node/blob/5436ea48715f6bb98f0a07bc07c5b04752fcf2e5/examples/webhook_endpoint.js
+ */

@@ -3,14 +3,14 @@ const refresh = require("passport-oauth2-refresh");
 const LOGIN_PATH = "/login";
 
 function authenticated(req, res, next) {
-  const user = req.user || {};
-  const refreshToken = user.refresh;
-  const expired = userExpired(req.user);
-
   // Avoid redirect loops trying to authenticate...
   if (req.path === LOGIN_PATH) {
     return next();
   }
+
+  const user = req.user || {};
+  const refreshToken = user.refresh;
+  const expired = userExpired(req.user);
 
   if (req.isAuthenticated() && !expired) {
     return next();
@@ -31,7 +31,12 @@ function authenticated(req, res, next) {
       }
     );
   } else {
-    res.redirect(LOGIN_PATH);
+    switch (req.headers["content-type"]) {
+      case "text/html":
+        return res.redirect(LOGIN_PATH);
+      default:
+        res.status(401).send("You must be logged in");
+    }
   }
 }
 
