@@ -31,11 +31,10 @@ function authenticated(req, res, next) {
       }
     );
   } else {
-    switch (req.headers["content-type"]) {
-      case "text/html":
-        return res.redirect(LOGIN_PATH);
-      default:
-        res.status(401).send("You must be logged in");
+    if (`${req.headers.accept}`.includes("text/html")) {
+      res.redirect(LOGIN_PATH);
+    } else {
+      res.status(401).send("You must be logged in");
     }
   }
 }
