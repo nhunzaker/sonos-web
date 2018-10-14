@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import config from "config";
+import helmet from "helmet";
 import { Store } from "svelte/store.js";
 
 import { Api } from "sonos-server";
@@ -31,6 +32,8 @@ const sapperMiddleware = sapper.middleware({
     return store;
   }
 });
+
+app.use(helmet());
 
 app.use(morgan("dev"));
 

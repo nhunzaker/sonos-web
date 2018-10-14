@@ -27,7 +27,7 @@ function OAuth() {
       cookie: {
         domain: config.get("hostname"),
         expires: new Date(Date.now() + 60 * 60 * 1000),
-        httpOnly: !config.get("isProduction"),
+        httpOnly: true,
         sameSite: true,
         secure: config.get("isProduction")
       }

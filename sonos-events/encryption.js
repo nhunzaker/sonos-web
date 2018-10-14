@@ -1,12 +1,13 @@
 const crypto = require("crypto");
 const config = require("config");
 
-const algorithm = "aes-256-ctr";
-const password = Buffer.from(config.get('pusher.decryptSecret'))
+const ALGORITHM = "aes-256-ctr";
+const KEY = config.get("pusher.decryptSecret")
+const IV = crypto.randomBytes(16);
 
 exports.encrypt = function encrypt(text) {
-  var cipher = crypto.createCipher(algorithm, password);
-  var crypted = cipher.update(text, "utf8", "hex");
+  let cipher = crypto.createCipheriv(ALGORITHM, KEY, IV);
+  let crypted = cipher.update(text, "utf8", "hex");
 
   crypted += cipher.final("hex");
 
@@ -14,8 +15,8 @@ exports.encrypt = function encrypt(text) {
 };
 
 exports.decrypt = function decrypt(text) {
-  var decipher = crypto.createDecipher(algorithm, password);
-  var dec = decipher.update(text, "hex", "utf8");
+  let decipher = crypto.createDecipheriv(ALGORITHM, KEY, IV);
+  let dec = decipher.update(text, "hex", "utf8");
 
   dec += decipher.final("utf8");
 

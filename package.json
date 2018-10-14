@@ -8,6 +8,7 @@
     "start:client": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client start",
     "format": "prettier --write '**/*.js'",
     "secret": "node -p \"require('crypto').randomBytes(64).toString('hex')\"",
+    "secret:key": "node -p \"require('crypto').randomBytes(16).toString('hex')\"",
     "build": "NODE_CONFIG_DIR=$(pwd)/config yarn workspace sonos-client build"
   },
   "dependencies": {

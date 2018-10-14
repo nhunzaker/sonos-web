@@ -55,8 +55,8 @@ module.exports = {
     },
     externals: [
       "express",
+      "helmet",
       "morgan",
-      "config",
       "encoding",
       "node-gyp-build",
       "pusher",
