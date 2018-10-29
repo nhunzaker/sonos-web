@@ -53,14 +53,3 @@ function handleCallback(request, response) {
     }
   }
 }
-
-/**
- * Pusher webhook validation requires a rawBody field. That doesn't
- * appear to be a thing with express requests. It could be because of
- * the body-parser, but I haven't investigated too thoroughly.
- *
- * This middleware adds the field back, following the example from the
- * pusher repo:
- *
- * https://github.com/pusher/pusher-http-node/blob/5436ea48715f6bb98f0a07bc07c5b04752fcf2e5/examples/webhook_endpoint.js
- */
