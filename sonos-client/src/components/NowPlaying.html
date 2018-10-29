@@ -23,13 +23,12 @@
       let { group } = this.get()
       let { socket } = this.store.get()
 
-      this.track = new Track(socket, track => this.set({ track }))
-      this.track.open(group.id)
+      this.track = new Track(group.id, socket, track => this.set({ track }))
     },
 
     onupdate({ changed, current }) {
       if ('group' in changed) {
-        this.track.open(current.group.id)
+        this.track.swap(current.group.id)
       }
     },
 

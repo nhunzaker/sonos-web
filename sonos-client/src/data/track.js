@@ -23,10 +23,12 @@ export class Track {
     return EMPTY;
   }
 
-  constructor(socket, callback) {
+  constructor(initialId, socket, callback) {
     this.payload = EMPTY;
     this.socket = socket;
     this.callback = callback;
+
+    this.open(initialId);
   }
 
   toJSON() {
