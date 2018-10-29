@@ -2,14 +2,14 @@
 
 <menu>
   {#if houses.length > 1}
-    <select name="house" class="dropdown">
+    <select name="house" class="dropdown" bind:value="selectedHouse">
       {#each houses as house}
         <option>{house.id}</option>
       {/each}
     </select>
   {/if}
   {#if groups.length > 1}
-    <select name="group" class="dropdown">
+    <select name="group" class="dropdown" bind:value="selectedGroup">
       {#each groups as group}
         <option value={group.id}>{group.name}</option>
       {/each}
@@ -31,6 +31,8 @@
     }
   }`
 
+  const firstById = (list, id) => list.find(item => item.id == id) || list[0]
+
   export default {
     async preload() {
       let { errors, data } = await request(this, query)
@@ -41,15 +43,29 @@
     data() {
       return {
         houses: [],
-        group: null,
-        house: null
+        selectedGroup: null,
+        selectedHouse: null
       }
     },
 
     computed: {
-      house: ({ houses }) => houses[0],
-      groups: ({ houses }) => houses.length ? houses[0].groups : [],
-      group: ({ houses }) => houses.length ? houses[0].groups[0] : {}
+      house({ houses, selectedHouse }) {
+        return firstById(houses, selectedHouse)
+      },
+      group({ houses, selectedHouse, selectedGroup }) {
+        let house = firstById(houses, selectedHouse)
+
+        if (house) {
+          return firstById(house.groups, selectedGroup)
+        }
+
+        return null
+      },
+      groups({ houses, selectedHouse }) {
+        let house = firstById(houses, selectedHouse)
+
+        return house ? house.groups : []
+      }
     },
 
     components: {

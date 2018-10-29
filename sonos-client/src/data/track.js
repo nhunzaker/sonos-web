@@ -23,25 +23,32 @@ export class Track {
     return EMPTY;
   }
 
-  constructor() {
+  constructor(socket, callback) {
     this.payload = EMPTY;
+    this.socket = socket;
+    this.callback = callback;
   }
 
   toJSON() {
     return this.payload;
   }
 
-  open(id, socket, callback) {
-    this.playback = socket.subscribe(playbackStatus(id));
-    this.metadata = socket.subscribe(metadataStatus(id));
+  open(id) {
+    this.playback = this.socket.subscribe(playbackStatus(id));
+    this.metadata = this.socket.subscribe(metadataStatus(id));
 
     this.playback.bind("update", status => {
-      callback(this.applyStatus(status));
+      this.callback(this.applyStatus(status));
     });
 
     this.metadata.bind("update", meta => {
-      callback(this.applyMeta(meta));
+      this.callback(this.applyMeta(meta));
     });
+  }
+
+  swap(id) {
+    this.close();
+    this.open(id);
   }
 
   close() {

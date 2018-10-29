@@ -1,4 +1,9 @@
+/**
+ * Sonos API GraphQL layer
+ */
+
 const express = require("express");
+
 const { OAuth, authenticated } = require("sonos-oauth");
 const { GraphQLServer } = require("./graphql-server");
 const { restRoutes } = require("./rest");
