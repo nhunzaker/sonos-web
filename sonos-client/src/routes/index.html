@@ -2,14 +2,14 @@
 
 <menu>
   {#if houses.length > 1}
-    <select name="house" class="dropdown" bind:value="selectedHouse">
+    <select name="house" class="dropdown" bind:value="selectedHouse" value="house.id">
       {#each houses as house}
         <option>{house.id}</option>
       {/each}
     </select>
   {/if}
   {#if groups.length > 1}
-    <select name="group" class="dropdown" bind:value="selectedGroup">
+    <select name="group" class="dropdown" bind:value="selectedGroup" value="group.id">
       {#each groups as group}
         <option value={group.id}>{group.name}</option>
       {/each}
@@ -19,6 +19,7 @@
 
 <script>
   import { request } from '../request'
+  import { firstById, firstByIdOrPlaying } from '../find'
 
   const query = `{
     houses: households {
@@ -27,11 +28,10 @@
         id
         name
         playbackState
+        isPlaying
       }
     }
   }`
-
-  const firstById = (list, id) => list.find(item => item.id == id) || list[0]
 
   export default {
     async preload() {
@@ -55,8 +55,10 @@
       group({ houses, selectedHouse, selectedGroup }) {
         let house = firstById(houses, selectedHouse)
 
+        console.log(selectedGroup)
+
         if (house) {
-          return firstById(house.groups, selectedGroup)
+          return firstByIdOrPlaying(house.groups, selectedGroup)
         }
 
         return null

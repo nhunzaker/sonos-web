@@ -67,6 +67,10 @@ const Resolvers = {
 
     playback(group, args, { loaders }, info) {
       return loaders.groupPlayback.load(group.id);
+    },
+
+    isPlaying(group, args, context, info) {
+      return group.playbackState === "PLAYBACK_STATE_PLAYING";
     }
   },
   Player: {

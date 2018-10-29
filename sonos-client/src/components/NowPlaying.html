@@ -28,6 +28,7 @@
 
     onupdate({ changed, current }) {
       if ('group' in changed) {
+        console.log("CHANGING TO", current.group.name)
         this.track.swap(current.group.id)
       }
     },

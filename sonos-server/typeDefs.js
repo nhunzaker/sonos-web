@@ -23,6 +23,7 @@ module.exports = gql`
     name: String
     playback: GroupPlayback
     playbackState: PlaybackState
+    isPlaying: Boolean
     coordinator: Player
     players: [Player]
     volume: Volume

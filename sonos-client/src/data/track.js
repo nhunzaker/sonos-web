@@ -73,6 +73,11 @@ export class Track {
   }
 
   applyMeta(meta) {
+    if (meta.currentItem == null) {
+      this.payload = EMPTY;
+      return this.payload;
+    }
+
     const { track } = meta.currentItem;
 
     let next = {
