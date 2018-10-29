@@ -2,16 +2,16 @@
 
 <menu>
   {#if houses.length > 1}
-    <select name="house" class="dropdown" bind:value="selectedHouse" value="{house.id}">
+    <select name="house" class="dropdown" bind:value="selectedHouse" value="{house.id}" title="Household ID: {group.id}">
       {#each houses as house}
         <option>{house.id}</option>
       {/each}
     </select>
   {/if}
   {#if groups.length > 1}
-    <select name="group" class="dropdown" bind:value="selectedGroup" value="{group.id}">
+    <select name="group" class="dropdown" bind:value="selectedGroup" value="{group.id}" title="Player ID: {group.id}">
       {#each groups as group}
-        <option value={group.id}>{group.name} {group.id}</option>
+        <option value={group.id}>{group.name}</option>
       {/each}
     </select>
   {/if}
