@@ -33,16 +33,22 @@ const sapperMiddleware = sapper.middleware({
   }
 });
 
+// Adds a handful of security enhancements to Express
 app.use(helmet());
 
+// Logging
 app.use(morgan("dev"));
 
+// Static assets
 app.use(express.static("static"));
 
+// Pusher and Sonos webhooks, playback management
 app.use(Events());
 
+// GraphQL API Interaction
 app.use(Api());
 
+// All other routes; the client-side app
 app.use(authenticated, sapperMiddleware);
 
 app.listen(config.get("port"), error => {
